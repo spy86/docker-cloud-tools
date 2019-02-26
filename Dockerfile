@@ -59,6 +59,6 @@ RUN apt-get install apt-transport-https lsb-release software-properties-common d
     apt-get install azure-cli
 
 ADD check.sh /check.sh
-RUN chmod 755 /versions.sh
+RUN chmod 755 /check.sh
 ENTRYPOINT [ "/bin/bash", "-c" ]
 CMD [ "/check.sh" ]

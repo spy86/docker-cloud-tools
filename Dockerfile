@@ -57,3 +57,8 @@ RUN apt-get install apt-transport-https lsb-release software-properties-common d
     apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv --keyserver packages.microsoft.com --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF && \
     apt-get update && \
     apt-get install azure-cli
+
+ADD check.sh /check.sh
+RUN chmod 755 /versions.sh
+ENTRYPOINT [ "/bin/bash", "-c" ]
+CMD [ "/check.sh" ]

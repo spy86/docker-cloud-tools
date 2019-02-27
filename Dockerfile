@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:9.5-slim
 
 LABEL maintainer="maciej.michalsk@gmail.com"
 
@@ -10,6 +10,11 @@ ARG OPENSHIFT_VERSION=v3.11.0-0cbc58b
 
 RUN apt-get update -y \
     && apt-get install wget vim curl git telnet zip unzip python-pip lsb-release lsb-base -y
+
+# Kops - Kubernetes Operations
+RUN curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64 \
+    && chmod +x kops-linux-amd64 \
+    && mv kops-linux-amd64 /usr/local/bin/kops
 
 # Ansible
 RUN apt-get install ansible -y
@@ -36,10 +41,6 @@ RUN curl -sSL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terr
 # Kubernetes tools
 RUN curl -sSL https://codeload.github.com/shawnxlw/kubernetes-tools/zip/v${KTOOLS_VERSION} -o ktools.zip \
     && unzip ktools.zip && mv kubernetes-tools-${KTOOLS_VERSION}/bin/* /usr/local/bin/ && mv kubernetes-tools-${KTOOLS_VERSION}/completion/__completion /usr/local/bin/__completion && rm -rf kubernetes-tools*
-
-# Kops - Kubernetes Operations
-RUN wget --no-check-certificate https://github.com/kubernetes/kops/releases/download/${KOPS_VERSION}/kops-linux-amd64 -o /usr/local/bin/kops \
-    && chmod +x /usr/local/bin/kops
 
 # awscli tool
 RUN /usr/bin/pip install awscli

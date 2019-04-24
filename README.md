@@ -1,21 +1,21 @@
 # Docker Cloud tools container
 
-[![docker-cloud-tools](https://img.shields.io/badge/spy86-cloud_tools-blue.svg)](https://cloud.docker.com/repository/docker/spy86/cloud-tools) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![docker-cloud-tools](https://img.shields.io/badge/spy86-cloud_tools-blue.svg)](https://cloud.docker.com/repository/docker/spy86/cloud-tools)
 
 Docker image that contains all necessary tools for doing Cloud Infrastructure Development.
 
 ## Tools
 
-- Ansible
-- Ansible Tower CLI
-- Openshift CLI
-- Terraform
-- kubectl
-- Kubernetes Tools
-- kops (Kubernetes Operations)
-- AWS CLI
-- GCP CLI
-- Azure CLI
+- [ ] Ansible
+- [ ] Ansible Tower CLI
+- [ ] Openshift CLI
+- [ ] Terraform
+- [ ] kubectl
+- [ ] Kubernetes Tools
+- [ ] kops (Kubernetes Operations)
+- [ ] AWS CLI
+- [ ] GCP CLI
+- [ ] Azure CLI
 
 ## Usage
 

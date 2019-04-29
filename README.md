@@ -1,6 +1,6 @@
 # Docker Cloud tools container
 
-[![docker-cloud-tools](https://img.shields.io/badge/spy86-cloud_tools-blue.svg)](https://cloud.docker.com/repository/docker/spy86/cloud-tools)
+[![docker-cloud-tools](https://img.shields.io/badge/spy86-cloud_tools-blue.svg)](https://cloud.docker.com/repository/docker/spy86/cloud-tools) [![Build Status](https://travis-ci.org/spy86/docker-cloud-tools.svg?branch=master)](https://travis-ci.org/spy86/docker-cloud-tools)
 
 Docker image that contains all necessary tools for doing Cloud Infrastructure Development.
 

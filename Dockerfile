@@ -37,7 +37,7 @@ RUN curl -sSL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terr
 
 # Kubernetes tools
 RUN curl -sSL https://github.com/shawnsw/kubernetes-tools/archive/refs/tags/${KTOOLS_VERSION.zip -o ktools.zip \
-    && unzip ktools.zip && mv kubernetes-tools-${KTOOLS_VERSION}/bin/* /usr/local/bin/ && mv kubernetes-tools-${KTOOLS_VERSION}/completion/__completion /usr/local/bin/__completion && rm -rf kubernetes-tools*
+    && unzip ktools.zip && mv kubernetes-tools-${KTOOLS_VERSION}.zip/bin/* /usr/local/bin/ && mv kubernetes-tools-${KTOOLS_VERSION}.zip/completion/__completion /usr/local/bin/__completion && rm -rf kubernetes-tools*
 
 # awscli tool
 RUN /usr/bin/pip install awscli

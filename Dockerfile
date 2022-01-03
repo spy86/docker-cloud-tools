@@ -1,11 +1,8 @@
 FROM debian:9.13-slim
 
-LABEL maintainer="maciej.michalsk@gmail.com"
-
-ARG KUBECTL_VERSION=v1.13.2
-ARG KTOOLS_VERSION=1.2.0
-ARG TERRAFORM_VERSION=0.11.11
-ARG KOPS_VERSION=1.11.0
+ARG KUBECTL_VERSION=v1.23.0
+ARG KTOOLS_VERSION=v2.1.0
+ARG TERRAFORM_VERSION=1.1.12
 ARG OPENSHIFT_VERSION=v3.11.0-0cbc58b
 
 RUN apt-get update -y \
@@ -39,7 +36,7 @@ RUN curl -sSL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terr
     && rm ./terraform.zip
 
 # Kubernetes tools
-RUN curl -sSL https://codeload.github.com/shawnxlw/kubernetes-tools/zip/v${KTOOLS_VERSION} -o ktools.zip \
+RUN curl -sSL https://github.com/shawnsw/kubernetes-tools/archive/refs/tags/${KTOOLS_VERSION.zip -o ktools.zip \
     && unzip ktools.zip && mv kubernetes-tools-${KTOOLS_VERSION}/bin/* /usr/local/bin/ && mv kubernetes-tools-${KTOOLS_VERSION}/completion/__completion /usr/local/bin/__completion && rm -rf kubernetes-tools*
 
 # awscli tool

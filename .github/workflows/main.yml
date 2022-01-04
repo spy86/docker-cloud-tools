@@ -17,11 +17,6 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y%m%d')"
-      - uses: act10ns/slack@v1
-        with:
-          status: starting
-          channel: '#build-notifications'
-        if: always()
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -39,10 +34,3 @@ jobs:
           tags: spy86/cloud-tools:${{ steps.date.outputs.date }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
-      - name: Slack Notification
-        uses: act10ns/slack@v1
-        with:
-          status: ${{ job.status }}
-          steps: ${{ toJson(steps) }}
-          channel: '#build-notifications'
-        if: always()

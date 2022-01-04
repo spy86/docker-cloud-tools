@@ -11,30 +11,38 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-      -
-        name: Get current date
+      - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y%m%d')"
-      -
-        name: Set up QEMU
+      - uses: act10ns/slack@v1
+        with:
+          status: starting
+          channel: '#build-notifications'
+        if: always()
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
-      -
-        name: Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      -
-        name: Login to DockerHub
+      - name: Login to DockerHub
         uses: docker/login-action@v1 
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
+      - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: spy86/cloud-tools:${{ steps.date.outputs.date }}
-      -
-        name: Image digest
+      - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: Slack Notification
+        uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+          channel: '#build-notifications'
+        if: always()

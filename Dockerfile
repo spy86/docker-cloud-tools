@@ -1,7 +1,7 @@
 FROM debian:9.13-slim
 
 ARG KUBECTL_VERSION=v1.23.0
-ARG KTOOLS_VERSION=v2.1.0
+ARG KTOOLS_VERSION=2.1.0
 ARG TERRAFORM_VERSION=1.1.2
 ARG OPENSHIFT_VERSION=v3.11.0-0cbc58b
 
@@ -36,8 +36,12 @@ RUN curl -sSL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terr
     && rm ./terraform.zip
 
 # Kubernetes tools
-RUN curl -sSL https://github.com/shawnsw/kubernetes-tools/archive/refs/tags/${KTOOLS_VERSION.zip -o ktools.zip \
-    && unzip ktools.zip && mv kubernetes-tools-${KTOOLS_VERSION}.zip/bin/* /usr/local/bin/ && mv kubernetes-tools-${KTOOLS_VERSION}.zip/completion/__completion /usr/local/bin/__completion && rm -rf kubernetes-tools*
+RUN curl -sSL https://github.com/shawnsw/kubernetes-tools/archive/refs/tags/v${KTOOLS_VERSION}.zip -o ./ktools.zip \
+    && unzip ./ktools.zip -d /tmp/ \
+    && mv /tmp/kubernetes-tools-${KTOOLS_VERSION}/bin/* /usr/local/bin/ \
+    && mv /tmp/kubernetes-tools-${KTOOLS_VERSION}/completion/__completion /usr/local/bin/__completion \
+    && rm -rf /tmp/kubernetes-tools* \
+    && rm -rf ./ktools.zip
 
 # awscli tool
 RUN /usr/bin/pip install awscli
@@ -49,12 +53,18 @@ RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
     apt-get update -y && apt-get install google-cloud-sdk -y
 
 # Azure cli tool
+RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor |  tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
 RUN apt-get install apt-transport-https lsb-release software-properties-common dirmngr -y && \
     AZ_REPO=$(lsb_release -cs) && \
     echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list && \
-    apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv --keyserver packages.microsoft.com --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF && \
+    #apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv --keyserver packages.microsoft.com --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF && \
     apt-get update && \
     apt-get install azure-cli
+    
+RUN apt-get purge wget vim curl git telnet zip unzip python-pip lsb-release lsb-base -y
+RUN apt-get autoremove -y
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/*
 
 ADD check.sh /check.sh
 RUN chmod 755 /check.sh

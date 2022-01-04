@@ -1,4 +1,4 @@
-FROM debian:9.13-slim
+FROM debian:11-slim
 
 ARG KUBECTL_VERSION=v1.23.0
 ARG KTOOLS_VERSION=2.1.0

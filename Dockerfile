@@ -6,7 +6,7 @@ ARG TERRAFORM_VERSION=1.1.2
 ARG OPENSHIFT_VERSION=v3.11.0-0cbc58b
 
 RUN apt-get update -y \
-    && apt-get install wget vim curl git telnet zip unzip python-pip lsb-release lsb-base -y
+    && apt-get install wget vim curl git telnet zip unzip python3-pip lsb-release lsb-base -y
 
 # Kops - Kubernetes Operations
 RUN curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64 \
@@ -60,8 +60,7 @@ RUN apt-get install apt-transport-https lsb-release software-properties-common d
     #apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv --keyserver packages.microsoft.com --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF && \
     apt-get update && \
     apt-get install azure-cli
-    
-RUN apt-get purge wget vim curl git telnet zip unzip python-pip lsb-release lsb-base -y
+
 RUN apt-get autoremove -y
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*

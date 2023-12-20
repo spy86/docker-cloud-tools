@@ -1,4 +1,4 @@
-FROM debian:bookworm-20231009-slim
+FROM debian:bookworm-20231218-slim
 
 ARG KUBECTL_VERSION=v1.23.0
 ARG KTOOLS_VERSION=2.1.0

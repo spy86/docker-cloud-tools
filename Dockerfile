@@ -1,8 +1,8 @@
-FROM debian:bookworm-20231009-slim
+FROM ubuntu:noble
 
-ARG KUBECTL_VERSION=v1.23.0
+ARG KUBECTL_VERSION=v1.29.0
 ARG KTOOLS_VERSION=2.1.0
-ARG TERRAFORM_VERSION=1.1.2
+ARG TERRAFORM_VERSION=1.6.6
 ARG OPENSHIFT_VERSION=v3.11.0-0cbc58b
 
 RUN apt-get update -y \
@@ -17,7 +17,7 @@ RUN curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s http
 RUN apt-get install ansible -y
 
 # Ansible tower cli tool
-RUN pip install ansible-tower-cli
+RUN pip3 install --user https://releases.ansible.com/ansible-tower/cli/ansible-tower-cli-latest.tar.gz --break-system-packages
 
 # Openshift cli
 RUN export OPENSHIFT_VERSION_NUMBER=$(echo $OPENSHIFT_VERSION | cut -d'-' -f1) \
@@ -44,26 +44,17 @@ RUN curl -sSL https://github.com/shawnsw/kubernetes-tools/archive/refs/tags/v${K
     && rm -rf ./ktools.zip
 
 # awscli tool
-RUN /usr/bin/pip install awscli
+RUN pip install awscli --break-system-packages
 
 # GCP SDK
-RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
-    echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
-    wget -q -O - https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
-    apt-get update -y && apt-get install google-cloud-sdk -y
+RUN curl -sSL https://sdk.cloud.google.com | bash
 
 # Azure cli tool
-RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor |  tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
-RUN apt-get install apt-transport-https lsb-release software-properties-common dirmngr -y && \
-    AZ_REPO=$(lsb_release -cs) && \
-    echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list && \
-    #apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv --keyserver packages.microsoft.com --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF && \
-    apt-get update && \
-    apt-get install azure-cli
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
-RUN apt-get autoremove -y
-RUN apt-get clean
-RUN rm -rf /var/lib/apt/lists/*
+RUN apt-get clean && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ADD check.sh /check.sh
 RUN chmod 755 /check.sh
